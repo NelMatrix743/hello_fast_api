@@ -15,3 +15,7 @@ wheels/
 
 # environment variables
 .ENV
+
+
+# others
+src/test.db
