@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio.engine import AsyncEngine
 from sqlalchemy.orm import DeclarativeBase
 
 import uuid
-import datetime
+from datetime import datetime
 from collections.abc import AsyncGenerator
 
 
@@ -22,7 +22,7 @@ class Post(DeclarativeBase):
     url: Column = Column(String, nullable=False)
     file_type: Column = Column(String, nullable=False)
     file_name: Column = Column(String, nullable=False)
-    created_at: Column = Column(DateTime, default=datetime.utcnow)
+    created_at: Column = Column(DateTime, default=datetime.now(datetime.timezone.utc))
 
 
 
