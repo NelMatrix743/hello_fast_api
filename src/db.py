@@ -13,7 +13,11 @@ from collections.abc import AsyncGenerator
 DATABASE_URL = "sqlite+aiosqlite:///./test.db"
 
 
-class Post(DeclarativeBase):
+class Base(DeclarativeBase):
+    pass
+
+
+class Post(Base):
 
     __tablename__ : str = "posts"
 
