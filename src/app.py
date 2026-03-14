@@ -3,7 +3,7 @@ from src.db import Post, create_db_and_tables, get_async_session
 from sqlalchemy.ext.asyncio import AsyncSession
 from contextlib import asynccontextmanager
 from imagekitio import APIStatusError
-from media import imagekit_client
+from src.media import imagekit_client
 
 import shutil
 import os 
