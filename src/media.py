@@ -5,6 +5,6 @@ import os
 
 load_dotenv()
 
-imagekit: ImageKit = ImageKit(private_key=os.getenv("IMAGEKIT_PRIVATE_KEY"))
+imagekit_client: ImageKit = ImageKit(private_key=os.getenv("IMAGEKIT_PRIVATE_KEY"))
 
 # eosc
