@@ -59,9 +59,16 @@ async def upload_file(file: UploadFile = File(...), caption: str = Form(""), ses
         raise HTTPException(status_code=500, detail=str(error))
 
     finally:
+        try:
+            file.file.close()
+        except Exception:
+            pass
+
         if os.path.exists(temporary_uploaded_file_path):
-            os.unlink(temporary_uploaded_file_path)
-        file.file.close()
+            try:
+                os.unlink(temporary_uploaded_file_path)
+            except PermissionError:
+                pass
 
 
 # eosc
