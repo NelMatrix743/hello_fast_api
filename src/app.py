@@ -72,9 +72,8 @@ async def upload_file(file: UploadFile = File(...), caption: str = Form(""), ses
                 pass
 
 
-
 @app.get("/feed")
-async def get_feed(session: AsyncSession = Depends(get_async_session)):
+async def get_feed(session: AsyncSession = Depends(get_async_session)) -> dict[str, list]:
     result = await session.execute(select(Post).order_by(Post.created_at.desc()))
     posts = [row[0] for row in result.all()]
 
@@ -93,6 +92,26 @@ async def get_feed(session: AsyncSession = Depends(get_async_session)):
 
     return { "post" : posts_data }
 
+
+@app.delete("/posts/{post_id}")
+async def delete_post(post_id: str, session: AsyncSession = Depends(get_async_session)):
+    try:
+        post_uuid = uuid.UUID(post_id)
+        result = await session.execute(select(Post).where(Post.id == post_uuid))
+        post = result.scalars().first()
+
+        if not post:
+            raise HTTPException(status_code=404, detail="Post not found")
+        
+        await session.delete(post)
+        await session.commit()
+
+        return {
+            "success" : True,
+            "message" : "Post successfully deleted!"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # eosc
