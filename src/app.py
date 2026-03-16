@@ -6,6 +6,9 @@ from contextlib import asynccontextmanager
 from imagekitio import APIStatusError
 from src.media import imagekit_client
 
+from src.users import auth_backend, current_active_user, fastapi_users
+from src.schemas import UserCreate, UserRead, UserUpdate
+
 import shutil
 import os 
 import uuid
@@ -19,6 +22,12 @@ async def lifespan(app: FastAPI):
     yield
 
 app: FastAPI = FastAPI(lifespan=lifespan)
+
+app.include_router(fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"])
+app.include_router(fastapi_users.get_register_router(UserRead, UserCreate), prefix="/auth", tags=["auth"])
+app.include_router(fastapi_users.get_reset_password_router(), prefix="/auth", tags=["auth"])
+app.include_router(fastapi_users.get_verify_router(UserRead), prefix="/auth", tags=["auth"])
+app.include_router(fastapi_users.get_users_router(UserRead, UserUpdate), prefix="/users", tags=["users"])
 
 
 
