@@ -2,7 +2,9 @@ from sqlalchemy import Column, String, Text, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.ext.asyncio.engine import AsyncEngine
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, relationship
+
+from fastapi_users.db import SQLAlchemyUserDatabase, SQLAlchemyBaseUserTableUUID
 
 import uuid
 from datetime import datetime, timezone
@@ -17,16 +19,23 @@ class Base(DeclarativeBase):
     pass
 
 
+class User(SQLAlchemyBaseUserTableUUID, Base):
+    poss = relationship("Post", back_populates="user")  
+
+
 class Post(Base):
 
     __tablename__ : str = "posts"
 
     id: Column = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Column = Column(UUID(as_uuid=True), ForeignKey("user.id"), nullable=False)
     caption: Column = Column(Text)
     url: Column = Column(String, nullable=False)
     file_type: Column = Column(String, nullable=False)
     file_name: Column = Column(String, nullable=False)
     created_at: Column = Column(DateTime, default=datetime.now(timezone.utc))
+
+    user = relationship("User", back_populates="posts")
 
 
 
