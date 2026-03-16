@@ -21,7 +21,7 @@ class Base(DeclarativeBase):
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
-    poss = relationship("Post", back_populates="user")  
+    posts = relationship("Post", back_populates="user")  
 
 
 class Post(Base):
