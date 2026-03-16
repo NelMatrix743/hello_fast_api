@@ -101,7 +101,7 @@ async def get_feed(session: AsyncSession = Depends(get_async_session), user: Use
             }
         )
 
-    return { "post" : posts_data }
+    return { "posts" : posts_data }
 
 
 @app.delete("/posts/{post_id}")
